@@ -1,485 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Al-Dawaa Links 💊</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CGP Portal & Team</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* --- الأساسيات والثيمات --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0a1628 0%, #1a2940 100%);
+            --card-bg: linear-gradient(145deg, rgba(26, 41, 64, 0.95), rgba(15, 25, 40, 0.98));
+            --accent: #ff8c42;
+            --text-color: #ffffff;
+            --border-color: rgba(255, 140, 66, 0.45);
+            --shadow-color: rgba(0,0,0,0.45);
+            --glow-color: rgba(255, 140, 66, 0.25);
+            --team-accent: #E91E63;
         }
 
+        [data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #eef2f7 0%, #d5dde8 100%);
+            --card-bg: linear-gradient(145deg, #ffffff, #eef2f7);
+            --accent: #ff6b35;
+            --text-color: #1a2940;
+            --border-color: rgba(255, 107, 53, 0.4);
+            --shadow-color: rgba(0,0,0,0.12);
+            --glow-color: rgba(255, 107, 53, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            min-height: 100vh;
-            transition: background 0.3s;
-        }
-
-        body.dark {
-            background: #0a1929;
-        }
-
-        /* Header */
-        .header {
-            position: sticky;
-            top: 0;
-            background: linear-gradient(135deg, #1a3a52, #2d7a6e);
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 100;
-            transition: transform 0.3s;
-        }
-
-        .header.hide {
-            transform: translateY(-100%);
-        }
-
-        .header-wrap {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            color: white;
-            font-size: 1.8em;
-        }
-
-        .theme-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255,255,255,0.2);
-            cursor: pointer;
-            font-size: 1.5em;
-            transition: all 0.3s;
-        }
-
-        .theme-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: rotate(20deg) scale(1.1);
-        }
-
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        /* Cards */
-        .card {
-            background: linear-gradient(135deg, #1a3a52, #0d2538);
-            border-radius: 50px;
-            padding: 25px 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        .card.teal {
-            background: linear-gradient(135deg, #2d7a6e, #1e5a4f);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        .card-icon {
-            font-size: 1.5em;
-        }
-
-        .arrow {
-            font-size: 1.3em;
-            transition: transform 0.3s;
-        }
-
-        .card.open .arrow {
-            transform: rotate(180deg);
-        }
-
-        /* Content */
-        .card-body {
-            max-height: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            height: 100vh;
             overflow: hidden;
-            transition: max-height 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.5s ease;
         }
 
-        .card.open .card-body {
-            max-height: 2000px;
-            padding-top: 20px;
-        }
-
-        /* Details */
-        .details {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .detail-item {
-            background: rgba(255,255,255,0.15);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .detail-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .label {
-            font-size: 0.85em;
-            opacity: 0.8;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .value {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            margin-bottom: 8px;
-            word-break: break-all;
-        }
-
-        .copy {
-            background: #3fad8f;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .copy:hover {
-            background: #36956f;
-            transform: translateY(-2px);
-        }
-
-        /* QR Section */
-        .qr-box {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
+        /* --- Landing Page --- */
+        #landingContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%; height: 100%;
             padding: 20px;
-            text-align: center;
+            z-index: 1;
         }
 
-        body.dark .qr-box {
-            background: rgba(255,255,255,0.1);
+        .top-logo {
+            width: 190px; max-width: 60%; margin-bottom: 45px;
+            filter: drop-shadow(0 6px 22px rgba(255,140,66,0.45));
+            animation: fadeInDown 0.6s ease both;
         }
 
-        .qr-title {
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1a3a52;
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 0.92; transform: translateY(0); } }
+
+        .boxes-wrapper { display: flex; gap: 28px; width: 100%; max-width: 680px; justify-content: center; animation: fadeInUp 0.6s ease 0.15s both; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .box-btn {
+            flex: 1; max-width: 215px; aspect-ratio: 1/1;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 24px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px var(--shadow-color); overflow: hidden;
+            backdrop-filter: blur(12px);
         }
 
-        body.dark .qr-title {
-            color: white;
+        .box-btn:hover { transform: translateY(-9px) scale(1.04); border-color: var(--accent); box-shadow: 0 22px 55px var(--shadow-color), 0 0 28px var(--glow-color); }
+        .icon { font-size: 3.6em; margin-bottom: 13px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transition: 0.3s; }
+        .box-btn:hover .icon { transform: scale(1.12); }
+        .title { font-size: 1.15em; font-weight: 700; color: var(--accent); letter-spacing: 2px; }
+
+        /* --- 3D Scene (Integrated Team) --- */
+        #scene {
+            display: none; width: 100%; height: 100%;
+            perspective: 1200px; align-items: center; justify-content: center;
+            cursor: grab; position: relative; background: rgba(13, 17, 23, 0.95);
         }
 
-        .qr-code {
-            display: inline-block;
-            padding: 15px;
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 15px;
+        .world-container { transform-style: preserve-3d; transition: transform 0.1s ease-out; }
+        .orbit-container { transform-style: preserve-3d; }
+        .orbit-ring {
+            position: absolute; width: 1200px; height: 1200px;
+            top: 50%; left: 50%; transform: translate(-50%, -50%) rotateX(90deg);
+            border-radius: 50%; border: 2px dashed rgba(255,255,255,0.1);
         }
 
-        .link-btn {
-            background: linear-gradient(135deg, #3fad8f, #2d7a6e);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 25px;
-            font-size: 1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
+        .center-logo {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 220px; animation: floatLogo 3s ease-in-out infinite; z-index: 50;
         }
+        .center-logo img { width: 100%; filter: drop-shadow(0 0 20px var(--team-accent)); }
+        @keyframes floatLogo { 0%, 100% { transform: translate(-50%, -50%) translateY(0); } 50% { transform: translate(-50%, -50%) translateY(-15px); } }
 
-        .link-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(63, 173, 143, 0.5);
+        .member-card {
+            position: absolute; left: 50%; top: 50%; width: 110px; height: 160px;
+            margin-left: -55px; margin-top: -80px; background: #161b22;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+            transition: 0.3s; pointer-events: auto; z-index: 100;
+            display: flex; flex-direction: column; overflow: hidden;
         }
+        .member-card:hover { border-color: var(--team-accent); box-shadow: 0 0 30px var(--team-accent); z-index: 1000; transform: scale(1.1) !important; }
+        .card-img-box { width: 100%; height: 120px; transform: translateY(100%); opacity: 0; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .card-img-box.revealed { transform: translateY(0); opacity: 1; }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .card-name-box { width: 100%; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; }
 
-        /* Back to Top */
-        .top-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #2d7a6e, #3fad8f);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-            z-index: 99;
-        }
+        /* --- UI Controls --- */
+        #backButton { display: none; position: fixed; top: 22px; left: 22px; z-index: 2000; cursor: pointer; width: 45px; height: 45px; transition: 0.3s; opacity: 0.7; }
+        #backButton:hover { transform: scale(1.15); opacity: 1; }
+        .back-triangle { width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-right: 20px solid var(--accent); }
+        .theme-toggle { position: fixed; top: 22px; right: 22px; z-index: 2000; width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border-color); cursor: pointer; color: var(--text-color); }
 
-        .top-btn.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        #viewerContainer { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; }
+        #contentFrame { width: 100%; height: 100%; border: none; }
 
-        .top-btn:hover {
-            transform: translateY(-5px);
-        }
+        /* Details Overlay */
+        .details-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 9000; backdrop-filter: blur(4px); }
+        .details-overlay.active { opacity: 1; pointer-events: auto; }
+        .details-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -40%) scale(0.9); width: 85%; max-width: 380px; background: #161b22; border: 2px solid var(--team-accent); border-radius: 15px; padding: 25px; opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 9999; text-align: center; }
+        .details-panel.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+        .d-img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--team-accent); margin-bottom: 15px; }
 
-        .top-btn::after {
-            content: '⬆';
-            color: white;
-            font-size: 1.5em;
-            display: block;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #3fad8f;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: all 0.4s;
-            z-index: 1000;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        @media (max-width: 600px) { .boxes-wrapper { gap: 12px; } .box-btn { border-radius: 18px; } .icon { font-size: 2.8em; } }
     </style>
 </head>
-<body>
-    <div class="header" id="header">
-        <div class="header-wrap">
-            <h1>💊 Al-Dawaa Links</h1>
-            <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+<body data-theme="dark">
+
+    <button class="theme-toggle" id="themeToggle">☀️</button>
+    <div id="backButton" onclick="resetAll()"><div class="back-triangle"></div></div>
+
+    <div id="landingContainer">
+        <img src="https://i.postimg.cc/GtwZpZLq/20251129-104938-0000.png" class="top-logo">
+        <div class="boxes-wrapper">
+            <div class="box-btn" onclick="showTeam()">
+                <div class="icon">👥</div>
+                <div class="title">CGP Team</div>
+            </div>
+            <div class="box-btn" onclick="showData('https://pdftest.edgeone.app/')">
+                <div class="icon">📂</div>
+                <div class="title">CGP Data</div>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="grid" id="grid"></div>
+    <div id="scene">
+        <div class="world-container" id="world">
+            <div class="orbit-container" id="orbitContainer">
+                <div class="orbit-ring"></div>
+                <div class="center-logo"><img src="https://i.postimg.cc/MHYtNdTY/20251129-104938-0000.png"></div>
+            </div>
+        </div>
     </div>
 
-    <button class="top-btn" id="topBtn" onclick="goTop()"></button>
-    <div class="toast" id="toast">✅ Copied!</div>
+    <div id="viewerContainer"><iframe id="contentFrame" src=""></iframe></div>
+
+    <div class="details-overlay" id="overlay" onclick="closeDetails()"></div>
+    <div class="details-panel" id="detailsPanel">
+        <img id="dImg" class="d-img">
+        <h2 id="dName" style="color:var(--team-accent)"></h2>
+        <h3 id="dRole" style="color:#8b949e; font-size:0.9rem; margin:10px 0"></h3>
+        <p id="dBio" style="color:#c9d1d9; font-size:0.85rem; line-height:1.5"></p>
+    </div>
 
     <script>
-        const links = [
-          
-            {
-                name: "Success Factors",
-                icon: "📊",
-                color: "navy",
-                url: "https://performancemanager5.successfactors.eu/sf/hrisworkflowapprovelink?workflowRequestId=V4-0-a1-RO4Pda6Bm_2sMquLQcz1rg3V3oVOGVzftHK93yVDdTdtYA&company=C0013527959P&username=10963&Treat-As=WEB#/login",
-                creds: []
-            },
-          
-            {
-                name: "Ronzac Flip Book",
-                icon: "📚",
-                color: "navy",
-                url: "https://heyzine.com/flip-book/aadaeb341a.html",
-                creds: []
-            },
-            {
-                name: "Private Label & Hollinz",
-                icon: "📖",
-                color: "teal",
-                url: "https://heyzine.com/flip-book/c9783b9af2.html#page/1",
-                creds: []
-            },
-           
-          
-            {
-                name: "All Regions Helpline",
-                icon: "📞",
-                color: "navy",
-                url: "https://docs.google.com/spreadsheets/d/1UEQHmIbFP-p1SQnbTTwxiPL-gPgtvFUK/edit?gid=344444652#gid=344444652",
-                creds: []
-            },
-            {
-                name: "Wasfaty Main",
-                icon: "💊",
-                color: "teal",
-                url: "https://sso.wasfaty.sa/auth/realms/master/protocol/openid-connect/auth?client_id=CPSSO&redirect_uri=https%3A%2F%2Fcp.wasfaty.sa%2F&state=4ec41df4-18dd-4028-9ded-713753884996&nonce=7a747fa4-16f5-4d70-8c3d-aba12869ba8d&response_mode=fragment&response_type=code&scope=openid",
-                creds: []
-            },
-            {
-                name: "Wasfaty Support",
-                icon: "🆘",
-                color: "navy",
-                url: "https://ul.wasfaty.sa/support",
-                creds: []
-            },
-            {
-                name: "Wasfaty Yusr",
-                icon: "🏥",
-                color: "teal",
-                url: "https://client.yusur.sa/",
-                creds: []
-            },
-           
-            {
-                name: "Mumaris Plus",
-                icon: "⚕️",
-                color: "teal",
-                url: "https://portal.scfhs.org.sa/",
-                creds: []
-            },
-           
-            {
-                name: "Insurance Check",
-                icon: "🔍",
-                color: "teal",
-                url: "https://www.chi.gov.sa/ServicesDirectory/Pages/Eservices-CheckInsurance.aspx?servicename=checkinsurance",
-                creds: []
-            }
+        const members = [
+            { img: "https://i.postimg.cc/pdq9KsQx/10-20251129-184528-0009.png", name: "Dr. Member 1", role: "Team Leader", bio: "Expert in clinical pharmacy with extensive experience.", color: "rgba(233, 30, 99, 0.4)" },
+            { img: "https://i.postimg.cc/jjZWyM60/11-20251129-184529-0010.png", name: "Dr. Member 2", role: "Pharmacist", bio: "Specialist in drug interactions.", color: "rgba(76, 175, 80, 0.4)" },
+            { img: "https://i.postimg.cc/d047G52W/12-20251129-184529-0011.png", name: "Dr. Member 3", role: "Researcher", bio: "Pharmaceutical formulations expert.", color: "rgba(33, 150, 243, 0.4)" },
+            { img: "https://i.postimg.cc/s2wB5TYJ/13-20251129-184529-0012.png", name: "Dr. Member 4", role: "Analyst", bio: "Medical data statistics analyst.", color: "rgba(255, 152, 0, 0.4)" },
+            { img: "https://i.postimg.cc/nLHjsyDS/14-20251129-184529-0013.png", name: "Dr. Member 5", role: "Coordinator", bio: "Workflow management specialist.", color: "rgba(156, 39, 176, 0.4)" },
+            { img: "https://i.postimg.cc/FK9dfMLZ/15-20251129-184529-0014.png", name: "Dr. Member 6", role: "Pharmacist", bio: "Patient counseling expert.", color: "rgba(0, 188, 212, 0.4)" },
+            { img: "https://i.postimg.cc/fbwt3G9m/16-20251129-184529-0015.png", name: "Dr. Member 7", role: "Pharmacist", bio: "Oncology pharmacy specialist.", color: "rgba(244, 67, 54, 0.4)" },
+            { img: "https://i.postimg.cc/s2VQBkhQ/2-20251129-184528-0001.png", name: "Dr. Member 8", role: "Pharmacist", bio: "Pediatric medication expert.", color: "rgba(255, 193, 7, 0.4)" },
+            { img: "https://i.postimg.cc/qvc6vJzC/3-20251129-184528-0002.png", name: "Dr. Member 9", role: "Pharmacist", bio: "Cardiology clinical specialist.", color: "rgba(63, 81, 181, 0.4)" },
+            { img: "https://i.postimg.cc/dVcTFktw/4-20251129-184528-0003.png", name: "Dr. Member 10", role: "Pharmacist", bio: "IV compounding specialist.", color: "rgba(103, 58, 183, 0.4)" },
+            { img: "https://i.postimg.cc/8zdfzpj1/5-20251129-184528-0004.png", name: "Dr. Member 11", role: "Pharmacist", bio: "Geriatric care management.", color: "rgba(0, 150, 136, 0.4)" },
+            { img: "https://i.postimg.cc/mgWF4zZS/6-20251129-184528-0005.png", name: "Dr. Member 12", role: "Pharmacist", bio: "Infectious diseases pharmacist.", color: "rgba(121, 85, 72, 0.4)" },
+            { img: "https://i.postimg.cc/RVHn2Qmf/7-20251129-184528-0006.png", name: "Dr. Member 13", role: "Pharmacist", bio: "Regulatory compliance expert.", color: "rgba(96, 125, 139, 0.4)" },
+            { img: "https://i.postimg.cc/Hsy7F4m3/8-20251129-184528-0007.png", name: "Dr. Member 14", role: "Pharmacist", bio: "Public health counselor.", color: "rgba(255, 87, 34, 0.4)" },
+            { img: "https://i.postimg.cc/xTzbByQv/9-20251129-184528-0008.png", name: "Dr. Member 15", role: "Pharmacist", bio: "Custom formula compounding.", color: "rgba(205, 220, 57, 0.4)" }
         ];
 
-        // Build cards
-        const grid = document.getElementById('grid');
-        links.forEach((item, i) => {
-            const card = document.createElement('div');
-            card.className = `card ${item.color}`;
-            card.innerHTML = `
-                <div class="card-top">
-                    <div class="card-title">
-                        <span class="card-icon">${item.icon}</span>
-                        <span>${item.name}</span>
-                    </div>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="card-body">
-                    ${item.creds.length ? `
-                        <div class="details">
-                            ${item.creds.map(c => `
-                                <div class="detail-item">
-                                    <div class="label">${c.label}</div>
-                                    <div class="value">${c.val}</div>
-                                    <button class="copy" onclick="copy('${c.val.replace(/'/g, "\\'")}')">📋 Copy</button>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                    <div class="qr-box">
-                        <div class="qr-title">📱 Scan QR Code</div>
-                        <div class="qr-code" id="qr${i}"></div>
-                        <button class="link-btn" onclick="openLink('${item.url}')">🔗 Open Link</button>
-                    </div>
-                </div>
-            `;
+        let rotX = -45, rotY = 0, zoomZ = -1500, panX = 0, panY = 0;
+        let isDragging = false, lastX, lastY, moveDist = 0, velX = 0, velY = 0.05;
 
-            card.querySelector('.card-top').onclick = () => {
-                const isOpen = card.classList.contains('open');
-                document.querySelectorAll('.card').forEach(c => c.classList.remove('open'));
-                if (!isOpen) {
-                    card.classList.add('open');
-                    if (item.url !== '#' && !document.querySelector(`#qr${i} canvas`)) {
-                        setTimeout(() => makeQR(i, item.url), 100);
-                    }
-                }
-            };
-
-            grid.appendChild(card);
-        });
-
-        function makeQR(id, url) {
-            new QRCode(document.getElementById('qr' + id), {
-                text: url,
-                width: 150,
-                height: 150,
-                colorDark: "#1a3a52",
-                colorLight: "#ffffff"
+        function init() {
+            const orbit = document.getElementById('orbitContainer');
+            members.forEach((m, i) => {
+                const card = document.createElement('div');
+                card.className = 'member-card';
+                card.style.transform = `rotateY(${(360/members.length)*i}deg) translateZ(600px)`;
+                card.innerHTML = `<div class="card-img-box"><img src="${m.img}"></div><div class="card-name-box" style="background:${m.color}">${m.name}</div>`;
+                card.onclick = (e) => { if(moveDist < 10) openDetails(m); e.stopPropagation(); };
+                orbit.appendChild(card);
+                setTimeout(() => card.querySelector('.card-img-box').classList.add('revealed'), i * 80);
             });
+            animate();
         }
 
-        function copy(txt) {
-            navigator.clipboard.writeText(txt);
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+        function showTeam() {
+            document.getElementById('landingContainer').style.display = 'none';
+            document.getElementById('scene').style.display = 'flex';
+            document.getElementById('backButton').style.display = 'flex';
         }
 
-        function openLink(url) {
-            if (url !== '#') window.open(url, '_blank');
+        function showData(url) {
+            document.getElementById('landingContainer').style.display = 'none';
+            document.getElementById('viewerContainer').style.display = 'block';
+            document.getElementById('contentFrame').src = url;
+            document.getElementById('backButton').style.display = 'flex';
         }
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-            const btn = document.querySelector('.theme-btn');
-            btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-            localStorage.setItem('dark', document.body.classList.contains('dark'));
+        function resetAll() {
+            document.getElementById('scene').style.display = 'none';
+            document.getElementById('viewerContainer').style.display = 'none';
+            document.getElementById('contentFrame').src = '';
+            document.getElementById('backButton').style.display = 'none';
+            document.getElementById('landingContainer').style.display = 'flex';
         }
 
-        function goTop() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
+        function openDetails(m) {
+            document.getElementById('dImg').src = m.img;
+            document.getElementById('dName').innerText = m.name;
+            document.getElementById('dRole').innerText = m.role;
+            document.getElementById('dBio').innerText = m.bio;
+            document.getElementById('detailsPanel').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
         }
 
-        let last = 0;
-        window.onscroll = () => {
-            const now = window.pageYOffset;
-            document.getElementById('header').classList.toggle('hide', now > last && now > 100);
-            document.getElementById('topBtn').classList.toggle('show', now > 400);
-            last = now;
+        function closeDetails() {
+            document.getElementById('detailsPanel').classList.remove('active');
+            document.getElementById('overlay').classList.remove('active');
+        }
+
+        const scene = document.getElementById('scene');
+        scene.onmousedown = (e) => { isDragging = true; moveDist = 0; lastX = e.clientX; lastY = e.clientY; };
+        window.onmousemove = (e) => {
+            if(!isDragging) return;
+            const dx = e.clientX - lastX, dy = e.clientY - lastY;
+            moveDist += Math.abs(dx) + Math.abs(dy);
+            rotY += dx * 0.3; rotX = Math.max(-70, Math.min(70, rotX - dy * 0.3));
+            velY = dx * 0.3; velX = -dy * 0.3;
+            lastX = e.clientX; lastY = e.clientY;
+        };
+        window.onmouseup = () => isDragging = false;
+        scene.onwheel = (e) => zoomZ = Math.max(-3000, Math.min(1000, zoomZ - e.deltaY * 1.5));
+
+        function animate() {
+            if(!isDragging) { rotY += velY; rotX += velX; velY *= 0.95; velX *= 0.95; if(Math.abs(velY)<0.05) velY=0.05; }
+            document.getElementById('world').style.transform = `translateX(${panX}px) translateY(${panY}px) translateZ(${zoomZ}px)`;
+            document.getElementById('orbitContainer').style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            requestAnimationFrame(animate);
+        }
+
+        document.getElementById('themeToggle').onclick = () => {
+            const b = document.body;
+            const isL = b.getAttribute('data-theme') === 'light';
+            b.setAttribute('data-theme', isL ? 'dark' : 'light');
+            document.getElementById('themeToggle').innerText = isL ? '☀️' : '🌙';
         };
 
-        if (localStorage.getItem('dark') === 'true') {
-            document.body.classList.add('dark');
-            document.querySelector('.theme-btn').textContent = '☀️';
-        }
+        init();
     </script>
 </body>
 </html>
